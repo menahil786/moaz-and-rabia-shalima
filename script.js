@@ -1,46 +1,79 @@
 /* ===================================================================
    CONFIG — the only line you need to touch for RSVP-to-Google-Sheet
    =================================================================== */
-// Paste the URL you get from deploying the Apps Script (see README.md) here:
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwffZd-VOOD_VAW_RDxtbqnQH6ISD7-bUYkS0uaeXZmdsN_2QvFcfywUzUTspXoUlXW/exec";
 
 /* ===================================================================
-   1. Opening card (3D flip)
+   1. Confetti — falls across the whole page, the whole time
    =================================================================== */
-const opener = document.getElementById('opener');
-const openerCard = document.getElementById('openerCard');
-const openBtn = document.getElementById('openBtn');
-const invite = document.getElementById('invite');
+const canvas = document.getElementById('confettiCanvas');
+const ctx = canvas.getContext('2d');
+const confettiColors = ['#f7c9d6', '#ffd9b0', '#e2d3fb', '#cdeedd', '#fff0b3', '#e08a97', '#d9a441'];
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function openInvitation(){
-  openerCard.classList.add('is-open');
-  invite.hidden = false;
-  document.body.style.overflow = '';
-  setTimeout(() => {
-    opener.classList.add('is-hidden');
-    revealOnScroll(); // trigger initial reveal check
-  }, 650);
+let pieces = [];
+function resizeCanvas(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 }
-document.body.style.overflow = 'hidden';
-openBtn.addEventListener('click', (e) => { e.stopPropagation(); openInvitation(); });
-opener.addEventListener('click', openInvitation);
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
-/* ===================================================================
-   2. Scroll reveal
-   =================================================================== */
-function revealOnScroll(){
-  document.querySelectorAll('[data-reveal]:not(.is-visible)').forEach(el => {
-    const rect = el.getBoundingClientRect();
-    if(rect.top < window.innerHeight * 0.88){
-      el.classList.add('is-visible');
+function makePiece(randomY){
+  return {
+    x: Math.random() * canvas.width,
+    y: randomY ? Math.random() * canvas.height : -20,
+    size: 6 + Math.random() * 8,
+    color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+    speedY: 0.8 + Math.random() * 1.6,
+    speedX: (Math.random() - 0.5) * 1.2,
+    rot: Math.random() * 360,
+    rotSpeed: (Math.random() - 0.5) * 6,
+    shape: Math.random() > 0.5 ? 'rect' : 'circle'
+  };
+}
+
+const PIECE_COUNT = window.innerWidth < 640 ? 55 : 110;
+for(let i = 0; i < PIECE_COUNT; i++){ pieces.push(makePiece(true)); }
+
+function drawPiece(p){
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.rotate(p.rot * Math.PI / 180);
+  ctx.fillStyle = p.color;
+  if(p.shape === 'rect'){
+    ctx.fillRect(-p.size/2, -p.size/3, p.size, p.size * 0.66);
+  } else {
+    ctx.beginPath();
+    ctx.arc(0, 0, p.size/2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+function tickConfetti(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  pieces.forEach(p => {
+    p.y += p.speedY;
+    p.x += p.speedX + Math.sin(p.y / 60) * 0.6;
+    p.rot += p.rotSpeed;
+    if(p.y > canvas.height + 20){
+      Object.assign(p, makePiece(false));
     }
+    drawPiece(p);
   });
+  requestAnimationFrame(tickConfetti);
 }
-window.addEventListener('scroll', revealOnScroll, { passive: true });
-window.addEventListener('resize', revealOnScroll);
+
+if(reduceMotion){
+  // draw a single static, gentle frame instead of a constant animation
+  pieces.forEach(drawPiece);
+} else {
+  requestAnimationFrame(tickConfetti);
+}
 
 /* ===================================================================
-   3. Countdown to Oct 4, 2026, 6:00 PM (Eastern time venue)
+   2. Countdown to Oct 4, 2026, 6:00 PM (Eastern time venue)
    =================================================================== */
 const WEDDING_DATE = new Date('2026-10-04T18:00:00-04:00');
 
@@ -67,68 +100,7 @@ updateCountdown();
 setInterval(updateCountdown, 1000);
 
 /* ===================================================================
-   4. Floating pastel petals (generated, layered for a soft 3D drift)
-   =================================================================== */
-const petalField = document.getElementById('petalField');
-const petalColors = ['#f6dde3', '#e7dbf6', '#dceee1', '#d9a6a0', '#c9a876'];
-
-function makePetals(count){
-  for(let i = 0; i < count; i++){
-    const p = document.createElement('div');
-    p.className = 'petal';
-    const size = 10 + Math.random() * 22;
-    const depth = Math.random(); // 0 = far/small/slow, 1 = near/big/fast
-    p.style.width = `${size}px`;
-    p.style.height = `${size * 0.8}px`;
-    p.style.left = `${Math.random() * 100}vw`;
-    p.style.top = `${Math.random() * 100}vh`;
-    p.style.background = petalColors[Math.floor(Math.random() * petalColors.length)];
-    p.style.opacity = 0.25 + depth * 0.4;
-    p.dataset.depth = depth.toFixed(2);
-    p.dataset.baseY = p.style.top;
-    p.dataset.driftSpeed = (4 + depth * 10).toFixed(2);
-    p.dataset.rot = Math.random() * 360;
-    petalField.appendChild(p);
-  }
-}
-makePetals(window.innerWidth < 640 ? 12 : 22);
-
-let ticks = 0;
-function animatePetals(){
-  ticks += 0.5;
-  document.querySelectorAll('.petal').forEach((p, i) => {
-    const depth = parseFloat(p.dataset.depth);
-    const speed = parseFloat(p.dataset.driftSpeed);
-    const rot = parseFloat(p.dataset.rot);
-    const sway = Math.sin((ticks + i * 10) / (30 - depth * 15)) * (10 + depth * 20);
-    const fall = ((ticks * speed * 0.15) + i * 40) % (window.innerHeight + 100) - 100;
-    const z = depth * 60;
-    p.style.transform = `translate3d(${sway}px, ${fall}px, ${z}px) rotate(${rot + ticks}deg)`;
-  });
-  requestAnimationFrame(animatePetals);
-}
-requestAnimationFrame(animatePetals);
-
-/* ===================================================================
-   5. Pointer-tilt 3D cards (hero date/venue card + venue motif)
-   =================================================================== */
-function attachTilt(el, strength = 10){
-  if(!el) return;
-  el.addEventListener('mousemove', (e) => {
-    const rect = el.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    el.style.transform = `rotateY(${x * strength}deg) rotateX(${-y * strength}deg)`;
-  });
-  el.addEventListener('mouseleave', () => {
-    el.style.transform = 'rotateY(0deg) rotateX(0deg)';
-  });
-}
-attachTilt(document.querySelector('.hero-card-inner'), 8);
-attachTilt(document.getElementById('venueTilt'), 14);
-
-/* ===================================================================
-   6. RSVP submission -> Google Sheet (via Apps Script Web App)
+   3. RSVP submission -> Google Sheet (via Apps Script Web App)
    =================================================================== */
 const rsvpForm = document.getElementById('rsvpForm');
 const rsvpStatus = document.getElementById('rsvpStatus');
@@ -162,7 +134,6 @@ rsvpForm.addEventListener('submit', async (e) => {
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(payload)
     });
-    // no-cors means we can't read the response, so we optimistically confirm
     rsvpStatus.textContent = 'Thank you! Your RSVP has been received. 💐';
     rsvpStatus.className = 'rsvp-status success';
     rsvpForm.reset();

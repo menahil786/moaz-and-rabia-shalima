@@ -12,47 +12,32 @@
 </head>
 <body>
 
-<!-- floating pastel petals layer, purely decorative -->
-<div class="petal-field" id="petalField" aria-hidden="true"></div>
+<!-- confetti falls across the ENTIRE page, all the time -->
+<canvas id="confettiCanvas"></canvas>
 
-<!-- ================= OPENING CARD (3D flip) ================= -->
-<section class="opener" id="opener">
-  <div class="opener-scene">
-    <div class="opener-card" id="openerCard">
-      <div class="opener-face opener-front">
-        <div class="opener-motif" aria-hidden="true">
-          <svg viewBox="0 0 200 200" class="motif-svg">
-            <circle cx="100" cy="100" r="70" class="motif-ring"/>
-            <circle cx="100" cy="100" r="50" class="motif-ring motif-ring--soft"/>
-          </svg>
-        </div>
-        <p class="opener-eyebrow">You are invited to the</p>
-        <h1 class="opener-title">Shalima</h1>
-        <p class="opener-names">Moaz <span class="amp">&amp;</span> Rabia</p>
-        <button class="opener-btn" id="openBtn" type="button">Open Invitation</button>
-      </div>
-      <div class="opener-face opener-back">
-        <p class="opener-back-text">tap anywhere to enter ✦</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= MAIN INVITE ================= -->
-<main class="invite" id="invite" hidden>
+<main class="invite">
 
   <!-- HERO -->
   <section class="hero">
     <div class="hero-inner">
-      <p class="eyebrow" data-reveal>Together with their families</p>
-      <h1 class="hero-title" data-reveal>
+      <p class="eyebrow">Together with their families</p>
+
+      <div class="photo-frame photo-frame--hero">
+        <img src="assets/images/couple.jpg" alt="Moaz & Rabia" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="photo-placeholder">
+          <span>💐</span>
+          <p>Add couple photo<br><code>assets/images/couple.jpg</code></p>
+        </div>
+      </div>
+
+      <h1 class="hero-title">
         <span class="script">Moaz Ahmed</span>
         <span class="amp-big">&amp;</span>
         <span class="script">Rabia Asif</span>
       </h1>
-      <p class="hero-sub" data-reveal>joyfully invite you to their <strong>Shalima</strong></p>
+      <p class="hero-sub">joyfully invite you to their <strong>Shalima</strong></p>
 
-      <div class="hero-card" id="tiltCard" data-reveal>
+      <div class="hero-card">
         <div class="hero-card-inner">
           <div class="hero-date">
             <span class="hero-date-day">04</span>
@@ -74,9 +59,13 @@
   <!-- FAMILIES -->
   <section class="families" id="families">
     <div class="section-inner">
-      <p class="section-eyebrow" data-reveal>The Couple</p>
+      <p class="section-eyebrow">The Couple</p>
       <div class="families-grid">
-        <div class="family-card" data-reveal>
+        <div class="family-card">
+          <div class="photo-frame photo-frame--small">
+            <img src="assets/images/groom.jpg" alt="Moaz Ahmed" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="photo-placeholder"><span>🤵</span></div>
+          </div>
           <span class="family-role">Groom</span>
           <h3 class="family-name">Moaz Ahmed</h3>
           <p class="family-of">son of<br><strong>Tariq Mahmood</strong></p>
@@ -84,7 +73,11 @@
         <div class="families-knot" aria-hidden="true">
           <svg viewBox="0 0 60 60"><path d="M10 30 C10 15, 25 15, 30 30 C35 45, 50 45, 50 30 C50 15, 35 15, 30 30 C25 45, 10 45, 10 30 Z" class="knot-path"/></svg>
         </div>
-        <div class="family-card" data-reveal>
+        <div class="family-card">
+          <div class="photo-frame photo-frame--small">
+            <img src="assets/images/bride.jpg" alt="Rabia Asif" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="photo-placeholder"><span>👰</span></div>
+          </div>
           <span class="family-role">Bride</span>
           <h3 class="family-name">Rabia Asif</h3>
           <p class="family-of">daughter of<br><strong>Asif</strong></p>
@@ -96,9 +89,9 @@
   <!-- COUNTDOWN -->
   <section class="countdown-section">
     <div class="section-inner">
-      <p class="section-eyebrow light" data-reveal>Counting down to</p>
-      <h2 class="countdown-heading" data-reveal>The Celebration</h2>
-      <div class="countdown" id="countdown" data-reveal>
+      <p class="section-eyebrow light">Counting down to</p>
+      <h2 class="countdown-heading">The Celebration</h2>
+      <div class="countdown" id="countdown">
         <div class="countdown-unit"><span id="cd-days">00</span><label>Days</label></div>
         <div class="countdown-unit"><span id="cd-hours">00</span><label>Hours</label></div>
         <div class="countdown-unit"><span id="cd-mins">00</span><label>Minutes</label></div>
@@ -110,49 +103,48 @@
   <!-- SCHEDULE -->
   <section class="schedule" id="schedule">
     <div class="section-inner">
-      <p class="section-eyebrow" data-reveal>Schedule</p>
-      <h2 class="section-title" data-reveal>How the Evening Unfolds</h2>
+      <p class="section-eyebrow">Schedule</p>
+      <h2 class="section-title">How the Evening Unfolds</h2>
       <ul class="schedule-list">
-        <li class="schedule-item" data-reveal>
+        <li class="schedule-item">
           <span class="schedule-time">6:00 PM</span>
           <span class="schedule-line" aria-hidden="true"></span>
           <span class="schedule-label">Guests Arrive</span>
         </li>
-        <li class="schedule-item" data-reveal>
+        <li class="schedule-item">
           <span class="schedule-time">7:00 PM</span>
           <span class="schedule-line" aria-hidden="true"></span>
           <span class="schedule-label">Shalima Begins</span>
         </li>
-        <li class="schedule-item" data-reveal>
+        <li class="schedule-item">
           <span class="schedule-time">8:30 PM</span>
           <span class="schedule-line" aria-hidden="true"></span>
           <span class="schedule-label">Dinner Service</span>
         </li>
-        <li class="schedule-item" data-reveal>
+        <li class="schedule-item">
           <span class="schedule-time">10:00 PM</span>
           <span class="schedule-line" aria-hidden="true"></span>
           <span class="schedule-label">Celebration Continues</span>
         </li>
       </ul>
-      <p class="schedule-note" data-reveal>* Times are approximate — edit these to match the real timeline.</p>
+      <p class="schedule-note">* Times are approximate — edit these to match the real timeline.</p>
     </div>
   </section>
 
   <!-- VENUE -->
   <section class="venue" id="venue">
     <div class="section-inner venue-inner">
-      <div class="venue-text" data-reveal>
+      <div class="venue-text">
         <p class="section-eyebrow">Venue</p>
         <h2 class="section-title">Crystal View</h2>
         <p class="venue-address">Fairfax, Virginia<br><span class="venue-placeholder">— add full street address here —</span></p>
         <a class="venue-link" href="https://maps.google.com/?q=Crystal+View+Fairfax+VA" target="_blank" rel="noopener">Get Directions ↗</a>
       </div>
-      <div class="venue-visual" data-reveal aria-hidden="true">
-        <div class="venue-card-3d" id="venueTilt">
-          <svg viewBox="0 0 240 240" class="venue-svg">
-            <polygon points="120,30 210,80 210,170 120,220 30,170 30,80" class="venue-hex"/>
-            <polygon points="120,60 185,95 185,155 120,190 55,155 55,95" class="venue-hex venue-hex--inner"/>
-          </svg>
+      <div class="photo-frame photo-frame--venue">
+        <img src="assets/images/venue.jpg" alt="Crystal View" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="photo-placeholder">
+          <span>🏛️</span>
+          <p>Add venue photo<br><code>assets/images/venue.jpg</code></p>
         </div>
       </div>
     </div>
@@ -161,11 +153,11 @@
   <!-- RSVP -->
   <section class="rsvp" id="rsvp">
     <div class="section-inner rsvp-inner">
-      <p class="section-eyebrow" data-reveal>Kindly Respond</p>
-      <h2 class="section-title" data-reveal>Will You Join Us?</h2>
-      <p class="rsvp-sub" data-reveal>We'd love to know you're coming — please RSVP by September 20th.</p>
+      <p class="section-eyebrow">Kindly Respond</p>
+      <h2 class="section-title">Will You Join Us?</h2>
+      <p class="rsvp-sub">We'd love to know you're coming — please RSVP by September 20th.</p>
 
-      <form class="rsvp-form" id="rsvpForm" data-reveal>
+      <form class="rsvp-form" id="rsvpForm">
         <div class="field">
           <label for="name">Full Name</label>
           <input type="text" id="name" name="name" required autocomplete="name">
