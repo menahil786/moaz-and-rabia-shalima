@@ -4,6 +4,24 @@
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwffZd-VOOD_VAW_RDxtbqnQH6ISD7-bUYkS0uaeXZmdsN_2QvFcfywUzUTspXoUlXW/exec";
 
 /* ===================================================================
+   0. Envelope intro
+   =================================================================== */
+const envelopeScreen = document.getElementById('envelopeScreen');
+const envelope = document.getElementById('envelope');
+const invite = document.getElementById('invite');
+
+function openEnvelope(){
+  envelope.classList.add('is-open');
+  setTimeout(() => {
+    invite.hidden = false;
+    document.body.style.overflow = '';
+    envelopeScreen.classList.add('is-hidden');
+  }, 700);
+}
+document.body.style.overflow = 'hidden';
+envelope.addEventListener('click', openEnvelope);
+
+/* ===================================================================
    1. Confetti — falls across the whole page, the whole time
    =================================================================== */
 const canvas = document.getElementById('confettiCanvas');
