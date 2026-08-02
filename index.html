@@ -12,6 +12,9 @@
 </head>
 <body>
 
+<!-- floating pastel shapes drifting across the whole page -->
+<div class="shape-field" id="shapeField" aria-hidden="true"></div>
+
 <!-- confetti falls across the ENTIRE page, all the time -->
 <canvas id="confettiCanvas"></canvas>
 
@@ -54,9 +57,13 @@
 
       <div class="hero-card">
         <div class="hero-card-inner">
-          <div class="hero-date">
-            <span class="hero-date-day">04</span>
-            <span class="hero-date-rest">October<br>2026</span>
+          <div class="scratch-wrap" id="scratchWrap">
+            <div class="hero-date">
+              <span class="hero-date-day">04</span>
+              <span class="hero-date-rest">October<br>2026</span>
+            </div>
+            <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
+            <p class="scratch-hint" id="scratchHint">✦ scratch to reveal the date ✦</p>
           </div>
           <div class="hero-divider" aria-hidden="true"></div>
           <div class="hero-venue">
@@ -170,9 +177,21 @@
   <!-- RSVP -->
   <section class="rsvp" id="rsvp">
     <div class="section-inner rsvp-inner">
+      <div class="floral-divider" aria-hidden="true"><span class="line"></span><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="4" fill="#e08a97"/><circle cx="12" cy="14" r="3" fill="#ffd9b0"/><circle cx="28" cy="14" r="3" fill="#e2d3fb"/><circle cx="12" cy="26" r="3" fill="#cdeedd"/><circle cx="28" cy="26" r="3" fill="#fff0b3"/></svg><span class="line"></span></div>
       <p class="section-eyebrow">Kindly Respond</p>
       <h2 class="section-title">Will You Join Us?</h2>
       <p class="rsvp-sub">We'd love to know you're coming — please RSVP by September 20th.</p>
+      <button class="rsvp-open-btn" id="rsvpOpenBtn" type="button">Confirm Your Attendance</button>
+    </div>
+  </section>
+
+  <!-- RSVP MODAL -->
+  <div class="rsvp-modal" id="rsvpModal">
+    <div class="rsvp-modal-backdrop" id="rsvpModalBackdrop"></div>
+    <div class="rsvp-modal-card">
+      <button class="rsvp-modal-close" id="rsvpModalClose" aria-label="Close">&times;</button>
+      <p class="section-eyebrow">Confirm Your Attendance</p>
+      <h3 class="section-title" style="font-size:1.6rem;">We'd Be Honored</h3>
 
       <form class="rsvp-form" id="rsvpForm">
         <div class="field">
@@ -198,7 +217,7 @@
         <p class="rsvp-status" id="rsvpStatus" role="status" aria-live="polite"></p>
       </form>
     </div>
-  </section>
+  </div>
 
   <footer class="footer">
     <p class="footer-names">Moaz <span class="amp">&amp;</span> Rabia</p>
