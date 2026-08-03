@@ -190,7 +190,6 @@ function tickConfetti(){
 }
 
 if(reduceMotion){
-  // draw a single static, gentle frame instead of a constant animation
   pieces.forEach(drawPiece);
 } else {
   requestAnimationFrame(tickConfetti);
@@ -254,7 +253,7 @@ rsvpForm.addEventListener('submit', async (e) => {
   try{
     await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors', // Apps Script web apps don't return CORS headers to fetch
+      mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(payload)
     });
